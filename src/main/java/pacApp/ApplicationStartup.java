@@ -2,7 +2,6 @@ package pacApp;
 
 import pacApp.pacData.UserRepository;
 import pacApp.pacLogic.Constants;
-import pacApp.pacModel.Currency;
 import pacApp.pacModel.User;
 
 import org.slf4j.Logger;
