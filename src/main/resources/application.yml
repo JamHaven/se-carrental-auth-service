@@ -36,4 +36,4 @@ jwt:
   secret: 3ef572f7769d78d
   expiration: 7200
 allow:
-  origin: localhost
+  origin: "*"
