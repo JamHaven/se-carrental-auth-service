@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "User")
+@Table(name = "CarrentalUser")
 public class User implements Cloneable {
 
     @Id
