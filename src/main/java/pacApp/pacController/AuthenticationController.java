@@ -67,7 +67,7 @@ public class AuthenticationController {
         log.info("user: " + savedUser.toString());
 
         String token = authenticationService.generateJwtToken(savedUser.getEmail(), user.getPassword());
-
+        log.info("token: " + token);
         JwtTokenResponse tokenResponse = new JwtTokenResponse(token);
 
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);

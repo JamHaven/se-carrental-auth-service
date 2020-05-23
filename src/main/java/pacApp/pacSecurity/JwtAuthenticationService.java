@@ -37,12 +37,15 @@ public class JwtAuthenticationService {
         }
 
         User user = optionalUser.get();
+        log.info("JwtAuthenticationService.user: " + user.toString());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
+            log.info("incorrect password");
             throw new JwtAuthenticationException("incorrect password");
         }
 
         String token = tokenService.generateToken(email);
+        log.info("JwtAuthenticationService.token: " + token);
 
         return token;
     }

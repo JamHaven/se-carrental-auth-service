@@ -5,6 +5,9 @@ server:
   forward-headers-strategy: FRAMEWORK
 # register service registry (discovery server)
 eureka:
+  instance:
+    hostname: carauth-service.northeurope.azurecontainer.io
+    #prefer-ip-address: true
   client:
     serviceUrl:
       #defaultZone: http://localhost:1111/eureka
@@ -24,10 +27,13 @@ spring:
     username: supermario
   jpa:
     hibernate:
-      ddl-auto: update #create-drop
-      format_sql: true
+      # use "create" or "create-drop" when you wish to recreate database on restart
+      # use "update" or "validate" when data is to be kept
+      ddl-auto: update
       dialect: org.hibernate.dialect.SQLServer2012Dialect
-  show-sql: true
+    properties:
+      hibernate.format_sql: true
+    show-sql: true
   #h2:
   #console:
     #enabled: true
