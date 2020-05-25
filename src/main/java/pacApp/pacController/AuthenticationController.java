@@ -1,14 +1,14 @@
 package pacApp.pacController;
 
 import org.apache.commons.validator.routines.EmailValidator;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import pacApp.pacData.UserRepository;
 import pacApp.pacException.AuthenticationForbiddenException;
 import pacApp.pacModel.User;
 import pacApp.pacModel.response.GenericResponse;
 import pacApp.pacModel.response.JwtTokenResponse;
-import pacApp.pacSecurity.JwtAuthenticatedProfile;
 import pacApp.pacSecurity.JwtAuthenticationService;
 
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -31,9 +30,17 @@ public class AuthenticationController {
     private final UserRepository repository;
     private JwtAuthenticationService authenticationService;
 
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
     public AuthenticationController(UserRepository repository, JwtAuthenticationService authenticationService){
         this.repository = repository;
         this.authenticationService = authenticationService;
+    }
+
+    @RequestMapping("/service-instances/{applicationName}")
+    public List<ServiceInstance> serviceInstancesByApplicationName(@PathVariable String applicationName) {
+        return this.discoveryClient.getInstances(applicationName);
     }
 
     @CrossOrigin
@@ -60,7 +67,7 @@ public class AuthenticationController {
         log.info("user: " + savedUser.toString());
 
         String token = authenticationService.generateJwtToken(savedUser.getEmail(), user.getPassword());
-
+        log.info("token: " + token);
         JwtTokenResponse tokenResponse = new JwtTokenResponse(token);
 
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);

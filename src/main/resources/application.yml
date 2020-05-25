@@ -1,51 +1,45 @@
 server:
-#  application:
-#    name: authorization-service
-  port: 443 #3333
+  #application:
+    #name: authentication-service
+  port: 2222 #443
   forward-headers-strategy: FRAMEWORK
-
 # register service registry (discovery server)
-#eureka:
-#  client:
-#    serviceUrl:
-#      defaultZone: http://server:1111/eureka
-
-# service registry config
-#eureka:
-#  instance:
-#    hostname: localhost
-#  client: #not a client
-#    registerWithEureka: false
-#    fetchRegistry: false
-#server:
-#  port: 1111
-
+eureka:
+  instance:
+    hostname: carauth-service.northeurope.azurecontainer.io
+    #prefer-ip-address: true
+  client:
+    serviceUrl:
+      #defaultZone: http://localhost:1111/eureka
+      #defaultZone: http://user:password@carrental-registry.northeurope.azurecontainer.io:1111/eureka
+      defaultZone: https://carrental-registry.azurewebsites.net:443/eureka
 logging:
   level:
-    root: ERROR
-    org.springframework.web: ERROR
-    com.netflix.eureka: ERROR
-    com.netflix.discovery: ERROR
-
+    root: INFO
+    org.springframework.web: INFO
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
 spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    password: IchBinSuper!
+    url: jdbc:sqlserver://carrental.database.windows.net:1433;database=carrentalDB;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+    username: supermario
   jpa:
     hibernate:
+      # use "create" or "create-drop" when you wish to recreate database on restart
+      # use "update" or "validate" when data is to be kept
       ddl-auto: update
-      format_sql: true
-  show-sql: true
-
-  h2:
-  console:
-    enabled: true
-
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+    properties:
+      hibernate.format_sql: true
+    show-sql: true
+  #h2:
+  #console:
+    #enabled: true
 jwt:
   header: Authorization
   secret: 3ef572f7769d78d
   expiration: 7200
-
-soapWebservice:
-  user: Admin
-  password: pa$$w0rd
-
 allow:
-  origin: *
+  origin: "*"
